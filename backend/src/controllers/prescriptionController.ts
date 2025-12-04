@@ -45,3 +45,22 @@ export const getPrescriptionById = async (req: AuthRequest, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const deletePrescription = async (req: AuthRequest, res: Response) => {
+    try {
+        const prescription = await Prescription.findById(req.params.id);
+
+        if (prescription) {
+            if (prescription.userId.toString() !== req.user._id.toString()) {
+                return res.status(401).json({ message: 'Not authorized' });
+            }
+
+            await prescription.deleteOne();
+            res.json({ message: 'Prescription removed' });
+        } else {
+            res.status(404).json({ message: 'Prescription not found' });
+        }
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};

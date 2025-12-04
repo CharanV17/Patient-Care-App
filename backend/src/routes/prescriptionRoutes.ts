@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPrescriptions, createPrescription, getPrescriptionById } from '../controllers/prescriptionController';
+import { getPrescriptions, createPrescription, getPrescriptionById, deletePrescription } from '../controllers/prescriptionController';
 import { protect } from '../middleware/authMiddleware';
 import { upload } from '../middleware/uploadMiddleware';
 
@@ -10,6 +10,7 @@ router.route('/')
     .post(protect, upload.single('image'), createPrescription);
 
 router.route('/:id')
-    .get(protect, getPrescriptionById);
+    .get(protect, getPrescriptionById)
+    .delete(protect, deletePrescription);
 
 export default router;

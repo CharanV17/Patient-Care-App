@@ -61,6 +61,17 @@ const Prescriptions = () => {
         }
     };
 
+    const handleDelete = async (id: string) => {
+        if (window.confirm('Are you sure you want to delete this prescription?')) {
+            try {
+                await api.delete(`/prescriptions/${id}`);
+                setPrescriptions(prescriptions.filter((p: any) => p._id !== id));
+            } catch (error) {
+                console.error('Error deleting prescription', error);
+            }
+        }
+    };
+
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
@@ -75,7 +86,11 @@ const Prescriptions = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {prescriptions.map((prescription: any) => (
-                    <PrescriptionCard key={prescription._id} prescription={prescription} />
+                    <PrescriptionCard
+                        key={prescription._id}
+                        prescription={prescription}
+                        onDelete={handleDelete}
+                    />
                 ))}
             </div>
 
